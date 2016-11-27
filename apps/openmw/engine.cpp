@@ -330,7 +330,7 @@ void OMW::Engine::createWindow(Settings::Manager& settings)
         pos_y = SDL_WINDOWPOS_UNDEFINED_DISPLAY(screen);
     }
 
-    Uint32 flags = SDL_WINDOW_OPENGL|SDL_WINDOW_SHOWN|SDL_WINDOW_RESIZABLE;
+    Uint32 flags = SDL_WINDOW_OPENGL|SDL_WINDOW_SHOWN|SDL_WINDOW_RESIZABLE|SDL_WINDOW_ALLOW_HIGHDPI;
     if(fullscreen)
         flags |= SDL_WINDOW_FULLSCREEN;
 
@@ -397,9 +397,12 @@ void OMW::Engine::createWindow(Settings::Manager& settings)
     osg::ref_ptr<SDLUtil::GraphicsWindowSDL2> graphicsWindow = new SDLUtil::GraphicsWindowSDL2(traits);
     if(!graphicsWindow->valid()) throw std::runtime_error("Failed to create GraphicsContext");
 
+    int viewportWidth, viewportHeight;
+    SDL_GL_GetDrawableSize(mWindow, &viewportWidth, &viewportHeight);
+
     osg::ref_ptr<osg::Camera> camera = mViewer->getCamera();
     camera->setGraphicsContext(graphicsWindow);
-    camera->setViewport(0, 0, width, height);
+    camera->setViewport(0, 0, viewportWidth, viewportHeight);
 
     mViewer->realize();
 
