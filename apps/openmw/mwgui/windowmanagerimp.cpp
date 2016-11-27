@@ -1084,32 +1084,35 @@ namespace MWGui
         }
     }
 
-    void WindowManager::windowResized(int x, int y)
+    void WindowManager::windowResized(int w, int h, float pixelScale)
     {
-        mGuiPlatform->getRenderManagerPtr()->setViewSize(x, y);
+        float uiScale = pixelScale * Settings::Manager::getFloat("scaling factor", "GUI");
+        int pixelW = (int) (w * pixelScale);
+        int pixelH = (int) (h * pixelScale);
+        mGuiPlatform->getRenderManagerPtr()->setViewSize(pixelW, pixelH, uiScale);
 
         // scaled size
         const MyGUI::IntSize& viewSize = MyGUI::RenderManager::getInstance().getViewSize();
-        x = viewSize.width;
-        y = viewSize.height;
+        w = viewSize.width;
+        h = viewSize.height;
 
-        sizeVideo(x, y);
+        sizeVideo(w, h);
 
         if (!mHud)
             return; // UI not initialized yet
 
         for (std::map<MyGUI::Window*, std::string>::iterator it = mTrackedWindows.begin(); it != mTrackedWindows.end(); ++it)
         {
-            MyGUI::IntPoint pos(static_cast<int>(Settings::Manager::getFloat(it->second + " x", "Windows") * x),
-                                static_cast<int>( Settings::Manager::getFloat(it->second+ " y", "Windows") * y));
-            MyGUI::IntSize size(static_cast<int>(Settings::Manager::getFloat(it->second + " w", "Windows") * x),
-                                 static_cast<int>(Settings::Manager::getFloat(it->second + " h", "Windows") * y));
+            MyGUI::IntPoint pos(static_cast<int>(Settings::Manager::getFloat(it->second + " x", "Windows") * w),
+                                static_cast<int>( Settings::Manager::getFloat(it->second+ " y", "Windows") * h));
+            MyGUI::IntSize size(static_cast<int>(Settings::Manager::getFloat(it->second + " w", "Windows") * w),
+                                 static_cast<int>(Settings::Manager::getFloat(it->second + " h", "Windows") * h));
             it->first->setPosition(pos);
             it->first->setSize(size);
         }
 
         for (WindowBase* window : mWindows)
-            window->onResChange(x, y);
+            window->onResChange(w, h);
 
         // TODO: check if any windows are now off-screen and move them back if so
     }

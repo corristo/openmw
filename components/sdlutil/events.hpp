@@ -75,7 +75,7 @@ public:
 
     virtual void windowClosed () {}
 
-    virtual void windowResized (int x, int y) {}
+    virtual void windowResized (int w, int h, float pixelScale) {}
 };
 
 }

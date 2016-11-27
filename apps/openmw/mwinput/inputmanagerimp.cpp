@@ -909,12 +909,12 @@ namespace MWInput
         mWindowVisible = visible;
     }
 
-    void InputManager::windowResized(int x, int y)
+    void InputManager::windowResized(int w, int h, float pixelScale)
     {
-        Settings::Manager::setInt("resolution x", "Video", x);
-        Settings::Manager::setInt("resolution y", "Video", y);
+        Settings::Manager::setInt("resolution x", "Video", w);
+        Settings::Manager::setInt("resolution y", "Video", h);
 
-        MWBase::Environment::get().getWindowManager()->windowResized(x, y);
+        MWBase::Environment::get().getWindowManager()->windowResized(w, h, pixelScale);
     }
 
     void InputManager::windowClosed()

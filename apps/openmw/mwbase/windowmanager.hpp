@@ -267,7 +267,7 @@ namespace MWBase
 
             virtual void processChangedSettings(const std::set< std::pair<std::string, std::string> >& changed) = 0;
 
-            virtual void windowResized(int x, int y) = 0;
+            virtual void windowResized(int w, int h, float pixelScale) = 0;
 
             virtual void executeInConsole (const std::string& path) = 0;
 

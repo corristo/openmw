@@ -47,7 +47,7 @@ class RenderManager : public MyGUI::RenderManager, public MyGUI::IRenderTarget
 
     osg::ref_ptr<osg::Camera> mGuiRoot;
 
-    float mInvScalingFactor;
+    float mInitialScalingFactor;
 
     osg::StateSet* mInjectState;
 
@@ -109,7 +109,7 @@ public:
 /*internal:*/
 
     void collectDrawCalls();
-    void setViewSize(int width, int height);
+    void setViewSize(int width, int height, float pixelScale);
 };
 
 }

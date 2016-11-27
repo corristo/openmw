@@ -295,7 +295,7 @@ namespace MWGui
 
     virtual void processChangedSettings(const Settings::CategorySettingVector& changed);
 
-    virtual void windowResized(int x, int y);
+    virtual void windowResized(int w, int h, float pixelScale);
 
     virtual void executeInConsole (const std::string& path);
 

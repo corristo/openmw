@@ -354,11 +354,9 @@ RenderManager::RenderManager(osgViewer::Viewer *viewer, osg::Group *sceneroot, R
   , mImageManager(imageManager)
   , mUpdate(false)
   , mIsInitialise(false)
-  , mInvScalingFactor(1.f)
+  , mInitialScalingFactor(scalingFactor)
   , mInjectState(NULL)
 {
-    if (scalingFactor != 0.f)
-        mInvScalingFactor = 1.f / scalingFactor;
 }
 
 RenderManager::~RenderManager()
@@ -403,7 +401,7 @@ void RenderManager::initialise()
     mSceneRoot->addChild(mGuiRoot.get());
 
     osg::ref_ptr<osg::Viewport> vp = mViewer->getCamera()->getViewport();
-    setViewSize(vp->width(), vp->height());
+    setViewSize(vp->width(), vp->height(), mInitialScalingFactor);
 
     MYGUI_PLATFORM_LOG(Info, getClassTypeName()<<" successfully initialized");
     mIsInitialise = true;
@@ -482,14 +480,21 @@ void RenderManager::collectDrawCalls()
     mUpdate = false;
 }
 
-void RenderManager::setViewSize(int width, int height)
+void RenderManager::setViewSize(int width, int height, float pixelScale)
 {
+    float invScalingFactor;
+
+    if (pixelScale == 0.f)
+        invScalingFactor = 1;
+    else
+        invScalingFactor = 1.f / pixelScale;
+
     if(width < 1) width = 1;
     if(height < 1) height = 1;
 
     mGuiRoot->setViewport(0, 0, width, height);
 
-    mViewSize.set(width * mInvScalingFactor, height * mInvScalingFactor);
+    mViewSize.set(width * invScalingFactor, height * invScalingFactor);
 
     mInfo.maximumDepth = 1;
     mInfo.hOffset = 0;
