@@ -409,6 +409,20 @@ void OMW::Engine::createWindow(Settings::Manager& settings)
     mViewer->getEventQueue()->getCurrentEventState()->setWindowRectangle(0, 0, width, height);
 }
 
+
+float OMW::Engine::getWindowScale()
+{
+    if (!mWindow) return 0;
+
+    int windowWidth;
+    SDL_GetWindowSize(mWindow, &windowWidth, NULL);
+
+    int drawableWidth;
+    SDL_GL_GetDrawableSize(mWindow, &drawableWidth, NULL);
+
+    return (float) drawableWidth / windowWidth;
+}
+
 void OMW::Engine::setWindowIcon()
 {
     boost::filesystem::ifstream windowIconStream;
@@ -498,7 +512,7 @@ void OMW::Engine::prepareEngine (Settings::Manager & settings)
     MWGui::WindowManager* window = new MWGui::WindowManager(mViewer, guiRoot, mResourceSystem.get(), mWorkQueue.get(),
                 mCfgMgr.getLogPath().string() + std::string("/"), myguiResources,
                 mScriptConsoleMode, mTranslationDataStorage, mEncoding, mExportFonts, mFallbackMap,
-                Version::getOpenmwVersionDescription(mResDir.string()));
+                Version::getOpenmwVersionDescription(mResDir.string()), getWindowScale());
     mEnvironment.setWindowManager (window);
 
     // Create sound system

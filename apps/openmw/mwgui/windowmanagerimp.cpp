@@ -131,7 +131,8 @@ namespace MWGui
     WindowManager::WindowManager(
             osgViewer::Viewer* viewer, osg::Group* guiRoot, Resource::ResourceSystem* resourceSystem, SceneUtil::WorkQueue* workQueue,
             const std::string& logpath, const std::string& resourcePath, bool consoleOnlyScripts,
-            Translation::Storage& translationDataStorage, ToUTF8::FromType encoding, bool exportFonts, const std::map<std::string, std::string>& fallbackMap, const std::string& versionDescription)
+            Translation::Storage& translationDataStorage, ToUTF8::FromType encoding, bool exportFonts, const std::map<std::string, std::string>& fallbackMap, const std::string& versionDescription,
+            float baseUIScale)
       : mStore(NULL)
       , mResourceSystem(resourceSystem)
       , mWorkQueue(workQueue)
@@ -195,7 +196,7 @@ namespace MWGui
       , mShowOwned(0)
       , mVersionDescription(versionDescription)
     {
-        float uiScale = Settings::Manager::getFloat("scaling factor", "GUI");
+        float uiScale = baseUIScale * Settings::Manager::getFloat("scaling factor", "GUI");
         mGuiPlatform = new osgMyGUI::Platform(viewer, guiRoot, resourceSystem->getImageManager(), uiScale);
         mGuiPlatform->initialise(resourcePath, logpath);
 

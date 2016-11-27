@@ -127,6 +127,8 @@ namespace OMW
             void prepareEngine (Settings::Manager & settings);
 
             void createWindow(Settings::Manager& settings);
+            /// Returns current window scale, 0 if mWindow is NULL
+            float getWindowScale();
             void setWindowIcon();
 
         public:
