@@ -160,6 +160,21 @@ QStringList Launcher::GraphicsPage::getAvailableResolutions(int screen)
     SDL_DisplayMode mode;
     int modeIndex, modes = SDL_GetNumDisplayModes(screen);
 
+    int maxWidth, maxHeight;
+
+    if (true) // TODO only if HiDPI enabled
+    {
+        SDL_Rect screenBounds;
+        SDL_GetDisplayBounds(screen, &screenBounds);
+        maxWidth = screenBounds.w;
+        maxHeight = screenBounds.h;
+    }
+    else
+    {
+        maxWidth = INT_MAX;
+        maxHeight = INT_MAX;
+    }
+
     if (modes < 0)
     {
         QMessageBox msgBox;
@@ -182,6 +197,10 @@ QStringList Launcher::GraphicsPage::getAvailableResolutions(int screen)
             msgBox.setText(tr("<br><b>SDL_GetDisplayMode failed:</b><br><br>") + QString::fromUtf8(SDL_GetError()) + "<br>");
             msgBox.exec();
             return result;
+        }
+
+        if (mode.w > maxWidth || mode.h > maxHeight) {
+            continue;
         }
 
         QString aspect = getAspect(mode.w, mode.h);
